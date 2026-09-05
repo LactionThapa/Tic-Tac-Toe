@@ -12,7 +12,8 @@ def open_game():
 
     game.title("Tic-Tac-Toe")
     game.resizable(False, False)
-    
+
+    players = ["X", "O"]
     buttons = []
     played_list: list[str] = []
     still_space: bool = True
@@ -38,40 +39,23 @@ def open_game():
 
     def button_pressed(row, col):
 
-        player(row,col)
-        if check_winner("X"):
-            print(f"X wins!")
-            reset()
-            end_game("X")
-            game.destroy()
-            return
-        
-        if count < 9:
-            still_space = True
-        else:
-            still_space = False
-            print("Draw")
-            reset()
-            end_game("Draw")
-            game.destroy()
-            return
-
-        computer()
-        if check_winner("O"):
-            print(f"O wins!")
-            reset()
-            end_game("O")
-            game.destroy()
-            return
-        if count < 9:
-            still_space = True
-        else:
-            still_space = False
-            print("Draw")
-            reset()
-            end_game("Draw")
-            game.destroy()
-            return
+        for i in range(2):
+            game_players(i, row, col)
+            if check_winner(players[i]):
+                reset()
+                end_game(players[i])
+                game.destroy()
+                return
+                    
+            if count < 9:
+                still_space = True
+            else:
+                still_space = False
+                print("Draw")
+                reset()
+                end_game("Draw")
+                game.destroy()
+                return
 
     def check_winner(player):
         # Check rows
@@ -113,6 +97,12 @@ def open_game():
         played_list[row][col] = "X"
         count += 1
 
+    def game_players(ind: int, row, col):
+        if ind == 0:
+            player(row,col)
+        else:
+            computer()
+
     def reset():
         global count
         count = 0
@@ -124,7 +114,7 @@ def end_game(player):
     end = tk.Toplevel(main_menu)
     end.title("Game Over")
     if player == "Draw":
-        tk.Label(end, text="It'/s a draw").pack()
+        tk.Label(end, text="It's a draw").pack()
     else:
         tk.Label(end, text=f"{player} wins!").pack()
 
